@@ -110,13 +110,53 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new PageResult(pageInfo.getTotal(), pageInfo.getResult());
     }
 
+    /**
+     * 启用和禁用员工账号
+     *
+     * @param status 状态码
+     * @param id     员工id
+     */
     @Override
     public void changeStatus(Integer status, Long id) {
         Employee emp = Employee.builder().id(id).status(status).build();
 
         int i = employeeMapper.update(emp);
 
-        if(i != 1){
+        if (i != 1) {
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+    }
+
+    /**
+     * 根据ID查询员工信息
+     *
+     * @param id 员工id
+     * @return
+     */
+    @Override
+    public Employee getById(Long id) {
+        Employee employee = employeeMapper.selectById(id);
+        if (employee != null) {
+            employee.setPassword("******");
+        }
+        return employee;
+    }
+
+    /**
+     * 编辑员工信息
+     *
+     * @param employeeDTO
+     */
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        // 设置更新时间和更新人
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        int cnt = employeeMapper.update(employee);
+
+        if (cnt != 1) {
             throw new BaseException(MessageConstant.UNKNOWN_ERROR);
         }
     }

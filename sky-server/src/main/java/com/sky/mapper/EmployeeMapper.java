@@ -28,4 +28,7 @@ public interface EmployeeMapper {
     Page<Employee> pageQuery(String name);
 
     int update(Employee emp);
+
+    @Select("select id, username,name,password,phone, sex, id_number, status, create_time, update_time,create_user, update_user from employee where id = #{id}")
+    Employee selectById(Long id);
 }
