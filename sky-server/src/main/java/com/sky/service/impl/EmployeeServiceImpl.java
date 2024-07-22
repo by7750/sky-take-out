@@ -110,4 +110,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new PageResult(pageInfo.getTotal(), pageInfo.getResult());
     }
 
+    @Override
+    public void changeStatus(Integer status, Long id) {
+        Employee emp = Employee.builder().id(id).status(status).build();
+
+        int i = employeeMapper.update(emp);
+
+        if(i != 1){
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+    }
+
+
 }

@@ -6,3 +6,5 @@ sky:
     database: sky_take_out
     username: root
     password: 3333
+  jwt:
+    admin-ttl: 3600000000

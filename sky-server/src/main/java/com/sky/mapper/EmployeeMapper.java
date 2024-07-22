@@ -27,4 +27,5 @@ public interface EmployeeMapper {
 
     Page<Employee> pageQuery(String name);
 
+    int update(Employee emp);
 }

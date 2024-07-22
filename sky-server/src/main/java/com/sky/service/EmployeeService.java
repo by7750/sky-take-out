@@ -22,6 +22,17 @@ public interface EmployeeService {
      */
     boolean save(EmployeeDTO employeeDTO);
 
+    /**
+     * 分页
+     * @param page
+     * @return
+     */
     PageResult pageQuery(EmployeePageQueryDTO page);
 
+    /**
+     * 启用和禁用员工账号
+     * @param status
+     * @param id
+     */
+    void changeStatus(Integer status, Long id);
 }
