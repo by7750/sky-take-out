@@ -1,17 +1,24 @@
 package com.sky.service.impl;
 
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.BaseException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.service.EmployeeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -53,6 +60,35 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3、返回实体对象
         return employee;
+    }
+
+    /**
+     * 保存员工
+     *
+     * @param employeeDTO
+     * @return
+     */
+    @Override
+    public boolean save(EmployeeDTO employeeDTO) {
+        // 拷贝employee
+        Employee emp = new Employee();
+        BeanUtils.copyProperties(employeeDTO, emp);
+        // 设置状态
+        emp.setStatus(StatusConstant.ENABLE);
+        // 设置默认加密密码
+        emp.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+        // 设置创建时间和更新时间
+        emp.setCreateTime(LocalDateTime.now());
+        emp.setUpdateTime(LocalDateTime.now());
+        // 设置创建人id和更新人id
+        Long id = BaseContext.getCurrentId();
+        emp.setCreateUser(id);
+        emp.setUpdateUser(id);
+        int i = employeeMapper.insert(emp);
+        if (i != 1) {
+            throw new BaseException(MessageConstant.INSERT_ERROR);
+        }
+        return true;
     }
 
 }
