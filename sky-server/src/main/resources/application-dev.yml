@@ -8,3 +8,9 @@ sky:
     password: 3333
   jwt:
     admin-ttl: 3600000000
+
+  alioss:
+    endpoint: oss-cn-wuhan-lr.aliyuncs.com
+    access-key-id: LTAI5t7bXsE5zcHLqumuwSry
+    access-key-secret: qE25J32mie8V0lAdxcr2TZ3hzT2iW8
+    bucket-name: sky-ywk
