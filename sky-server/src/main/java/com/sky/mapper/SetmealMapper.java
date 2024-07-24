@@ -45,4 +45,11 @@ public interface SetmealMapper {
             "from setmeal " +
             "where id = #{id}")
     Setmeal selectById(Long id);
+
+    /**
+     * 批量删除
+     * @param ids 需要删除的id
+     * @return
+     */
+    int deleteBatch(Long[] ids);
 }

@@ -100,7 +100,7 @@ public class SetmealServiceImpl implements SetmealService {
     public SetmealVO getByIdWithDish(Long id) {
         // 查
         Setmeal setmeal = setmealMapper.selectById(id);
-        if(null == setmeal){
+        if (null == setmeal) {
             return null;
         }
         SetmealVO setmealVO = new SetmealVO();
@@ -112,5 +112,29 @@ public class SetmealServiceImpl implements SetmealService {
         return setmealVO;
     }
 
+    /**
+     * 批量删除套餐
+     *
+     * @param ids
+     */
+    @Override
+    public void removeBatch(Long[] ids) {
+        // 判空
+        if (null == ids || ids.length == 0) {
+            return;
+        }
+        // 上架的套餐不能删除
+        for (Long id : ids) {
+            Setmeal setmeal = setmealMapper.selectById(id);
+            if (setmeal.getStatus() == 1) {
+                throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
+            }
+        }
+        // 开始删除
+        int cnt = setmealMapper.deleteBatch(ids);
+        if (cnt != ids.length) {
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+    }
 
 }

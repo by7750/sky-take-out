@@ -34,4 +34,10 @@ public interface SetmealService {
      */
 
     SetmealVO getByIdWithDish(Long id);
+
+    /**
+     * 批量删除套餐
+     * @param ids
+     */
+    void removeBatch(Long[] ids);
 }

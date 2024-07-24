@@ -65,4 +65,16 @@ public class SetmealController {
         SetmealVO setmealVO = setmealService.getByIdWithDish(id);
         return Result.success(setmealVO);
     }
+    /**
+     * 批量删除套餐
+     * @param ids ids
+     * @return
+     */
+    @ApiOperation("批量删除套餐")
+    @DeleteMapping
+    public Result removeBatch(Long[] ids){
+        log.info("批量删除：{}", Arrays.toString(ids));
+        setmealService.removeBatch(ids);
+        return Result.success();
+    }
 }
