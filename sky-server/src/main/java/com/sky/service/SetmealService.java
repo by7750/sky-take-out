@@ -7,6 +7,7 @@ import com.sky.vo.SetmealVO;
 
 /**
  * 套餐业务接口
+ *
  * @author yao
  * @version 1.0
  * @date 2024/7/25 - 1:09
@@ -16,12 +17,14 @@ import com.sky.vo.SetmealVO;
 public interface SetmealService {
     /**
      * 新增套餐业务
+     *
      * @param setmealDTO
      */
     void save(SetmealDTO setmealDTO);
 
     /**
      * 套餐分页查询
+     *
      * @param setmealPageQueryDTO
      * @return
      */
@@ -29,6 +32,7 @@ public interface SetmealService {
 
     /**
      * 根据id查询
+     *
      * @param id 套餐id
      * @return
      */
@@ -37,13 +41,23 @@ public interface SetmealService {
 
     /**
      * 批量删除套餐
+     *
      * @param ids
      */
     void removeBatch(Long[] ids);
 
     /**
+     * 修改套餐
      *
      * @param setmealDTO
      */
     void updateWithDish(SetmealDTO setmealDTO);
+
+    /**
+     * 修改套餐状态
+     *
+     * @param status 状态码，1为上架，0为下架
+     * @param id     套餐id
+     */
+    void changeStatus(Integer status, Long id);
 }

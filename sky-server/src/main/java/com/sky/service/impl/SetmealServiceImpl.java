@@ -172,4 +172,20 @@ public class SetmealServiceImpl implements SetmealService {
         }
 
     }
+
+    /**
+     * 修改套餐状态
+     *
+     * @param status 状态码，1为上架，0为下架
+     * @param id     套餐id
+     */
+    @Override
+    public void changeStatus(Integer status, Long id) {
+        Setmeal setmeal = Setmeal.builder().status(status).id(id).build();
+        int cnt = setmealMapper.update(setmeal);
+
+        if (cnt != 1) {
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+    }
 }
