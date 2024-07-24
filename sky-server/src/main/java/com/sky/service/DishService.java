@@ -2,6 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.vo.DishVO;
 
@@ -18,12 +19,14 @@ public interface DishService {
 
     /**
      * 新增菜品和对应口味数据
+     *
      * @param dishDTO
      */
     void saveWithFlavor(DishDTO dishDTO);
 
     /**
      * 菜品分页查询
+     *
      * @param dishPageQueryDTO
      * @return
      */
@@ -31,12 +34,14 @@ public interface DishService {
 
     /**
      * 批量删除菜品
+     *
      * @param ids
      */
     void deleteBatch(List<Long> ids);
 
     /**
      * 根据id查
+     *
      * @param id
      * @return
      */
@@ -44,14 +49,24 @@ public interface DishService {
 
     /**
      * 修改菜品信息和对应的口味信息
+     *
      * @param dishDTO
      */
     void updateWithFlavor(DishDTO dishDTO);
 
     /**
      * 修改菜品售卖状态
+     *
      * @param status 1为启售，0为停售
-     * @param id 菜品id
+     * @param id     菜品id
      */
     void changeStatus(Integer status, Long id);
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId 分类id
+     * @return
+     */
+    List<Dish> getByCategoryId(Long categoryId);
 }

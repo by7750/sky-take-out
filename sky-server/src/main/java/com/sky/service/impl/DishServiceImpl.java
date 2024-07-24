@@ -189,5 +189,13 @@ public class DishServiceImpl implements DishService {
         }
     }
 
-
+    /**
+     * 根据分类查菜品
+     * @param categoryId 分类id
+     * @return
+     */
+    @Override
+    public List<Dish> getByCategoryId(Long categoryId) {
+        return dishMapper.selectByCategoryId(categoryId);
+    }
 }
