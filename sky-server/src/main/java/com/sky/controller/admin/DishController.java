@@ -100,6 +100,14 @@ public class DishController {
         return Result.success();
     }
 
+    /**
+     * 启售和停售菜品
+     *
+     * @param status 状态码
+     * @param id     菜品id
+     * @return
+     */
+    @ApiOperation("菜品启售、停售")
     @PostMapping("/status/{status}")
     public Result changeStatus(@PathVariable Integer status, Long id) {
         log.info("修改id{}的菜品状态为：{}", id, status == 1 ? "启售" : "停售");
