@@ -174,5 +174,20 @@ public class DishServiceImpl implements DishService {
 
     }
 
+    /**
+     * 修改菜品售卖状态
+     *
+     * @param status 1为启售，0为停售
+     * @param id     菜品id
+     */
+    @Override
+    public void changeStatus(Integer status, Long id) {
+        Dish dish = Dish.builder().id(id).status(status).build();
+        int update = dishMapper.update(dish);
+        if (update != 1) {
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+    }
+
 
 }
