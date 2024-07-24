@@ -137,4 +137,39 @@ public class SetmealServiceImpl implements SetmealService {
         }
     }
 
+
+    /**
+     * 修改套餐
+     *
+     * @param setmealDTO
+     */
+    @Override
+    @Transactional
+    public void updateWithDish(SetmealDTO setmealDTO) {
+        // 判空
+        if (setmealDTO == null || setmealDTO.getId() == null) {
+            return;
+        }
+        // 拷贝属性
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        // 修改
+        int cnt = setmealMapper.update(setmeal);
+        if (cnt != 1) {
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+        // 修改菜品
+        // 删除之后重新添加
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        int i = setmealDishMapper.deleteBySetmealId(setmeal.getId());
+        // 给菜品赋上新的套餐id，添加菜品
+        for (SetmealDish setmealDish : setmealDishes) {
+            setmealDish.setSetmealId(setmeal.getId());
+        }
+        int scnt = setmealDishMapper.insertBatch(setmealDishes);
+        if (scnt != setmealDishes.size()) {
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+
+    }
 }

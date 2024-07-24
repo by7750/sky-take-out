@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -51,4 +52,7 @@ public interface SetmealDishMapper {
      */
     @Select("select id, setmeal_id, dish_id, name, price, copies from setmeal_dish where setmeal_id = #{id}")
     List<SetmealDish> selectBySetmealId(Long setmealId);
+
+    @Delete("delete from setmeal_dish where setmeal_id = #{setmealId}")
+    int deleteBySetmealId(Long id);
 }

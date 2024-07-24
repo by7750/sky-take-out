@@ -40,4 +40,10 @@ public interface SetmealService {
      * @param ids
      */
     void removeBatch(Long[] ids);
+
+    /**
+     *
+     * @param setmealDTO
+     */
+    void updateWithDish(SetmealDTO setmealDTO);
 }

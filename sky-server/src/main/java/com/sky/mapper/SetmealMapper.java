@@ -52,4 +52,12 @@ public interface SetmealMapper {
      * @return
      */
     int deleteBatch(Long[] ids);
+
+    /**
+     * 修改套餐信息
+     * @param setmeal
+     * @return
+     */
+    @AutoFill(OperationType.UPDATE)
+    int update(Setmeal setmeal);
 }
