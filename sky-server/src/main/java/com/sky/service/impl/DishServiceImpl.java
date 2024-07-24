@@ -126,4 +126,53 @@ public class DishServiceImpl implements DishService {
         int fcnt = dishFlavorMapper.deleteByDishIds(ids);
 
     }
+
+    /**
+     * 根据id查
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public DishVO getByIdWithFlavor(Long id) {
+        Dish dish = dishMapper.selectById(id);
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        List<DishFlavor> dishFlavors = dishFlavorMapper.selectByDishId(id);
+        dishVO.setFlavors(dishFlavors);
+        return dishVO;
+    }
+
+    /**
+     * 修改菜品信息和对应的口味信息
+     *
+     * @param dishDTO
+     */
+    @Override
+    public void updateWithFlavor(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        // 更新菜品数据
+        int cnt = dishMapper.update(dish);
+        if (cnt != 1) {
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+        // 删除口味数据再重新插入
+        Long dishId = dishDTO.getId();
+        dishFlavorMapper.deleteByDishId(dishId);
+
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (null == flavors || flavors.size() == 0) {
+            return;
+        }
+        // 设置dishid
+        flavors.forEach(dishFlavor -> dishFlavor.setDishId(dishDTO.getId()));
+        int i = dishFlavorMapper.insertBatch(flavors);
+        if (i != flavors.size()) {
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+
+    }
+
+
 }
