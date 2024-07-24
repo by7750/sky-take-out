@@ -9,10 +9,12 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.BaseException;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
+import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,8 +68,8 @@ public class SetmealServiceImpl implements SetmealService {
         for (SetmealDish setmealDish : setmealDishes) {
             setmealDish.setSetmealId(setmeal.getId());
         }
-        if(null ==setmealDishes || setmealDishes.size() == 0){
-            return ;
+        if (null == setmealDishes || setmealDishes.size() == 0) {
+            return;
         }
         int i = setmealDishMapper.insertBatch(setmealDishes);
         if (i != setmealDishes.size()) {
@@ -77,6 +79,7 @@ public class SetmealServiceImpl implements SetmealService {
 
     /**
      * 分页查套餐
+     *
      * @param setmealPageQueryDTO
      * @return
      */
@@ -86,4 +89,28 @@ public class SetmealServiceImpl implements SetmealService {
         Page<Setmeal> page = setmealMapper.selectPage(setmealPageQueryDTO);
         return new PageResult(page.getTotal(), page.getResult());
     }
+
+    /**
+     * 根据id查套餐
+     *
+     * @param id 套餐id
+     * @return
+     */
+    @Override
+    public SetmealVO getByIdWithDish(Long id) {
+        // 查
+        Setmeal setmeal = setmealMapper.selectById(id);
+        if(null == setmeal){
+            return null;
+        }
+        SetmealVO setmealVO = new SetmealVO();
+        // 拷贝
+        BeanUtils.copyProperties(setmeal, setmealVO);
+        // 查询菜品信息
+        List<SetmealDish> setmealDishes = setmealDishMapper.selectBySetmealId(id);
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
+    }
+
+
 }
