@@ -1,12 +1,17 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.BaseException;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
+import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +49,7 @@ public class SetmealServiceImpl implements SetmealService {
         Setmeal setmeal = new Setmeal();
         // 拷贝属性
         BeanUtils.copyProperties(setmealDTO, setmeal);
+        setmeal.setStatus(StatusConstant.DISABLE);
         // 执行新增套餐
         int cnt = setmealMapper.insert(setmeal);
         if (cnt != 1) {
@@ -67,5 +73,17 @@ public class SetmealServiceImpl implements SetmealService {
         if (i != setmealDishes.size()) {
             throw new BaseException(MessageConstant.INSERT_ERROR);
         }
+    }
+
+    /**
+     * 分页查套餐
+     * @param setmealPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO) {
+        PageHelper.startPage(setmealPageQueryDTO.getPage(), setmealPageQueryDTO.getPageSize());
+        Page<Setmeal> page = setmealMapper.selectPage(setmealPageQueryDTO);
+        return new PageResult(page.getTotal(), page.getResult());
     }
 }
