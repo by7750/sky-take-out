@@ -70,6 +70,7 @@ public interface DishMapper {
 
     /**
      * 修改菜品信息
+     *
      * @param dish
      * @return
      */
@@ -78,4 +79,12 @@ public interface DishMapper {
 
     @Select("select * from dish where category_id = #{id}")
     List<Dish> selectByCategoryId(Long categoryId);
+
+    /**
+     * 条件查询
+     *
+     * @param dish
+     * @return
+     */
+    List<Dish> list(Dish dish);
 }
