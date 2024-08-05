@@ -71,12 +71,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             if (null == dishId) {
                 Setmeal setmeal = setmealMapper.selectById(setmealId);
-                shoppingCart.setSetmealId(setmeal.getId());
+                shoppingCart.setImage(setmeal.getImage());
                 shoppingCart.setName(setmeal.getName());
                 shoppingCart.setAmount(setmeal.getPrice());
             } else {
                 Dish dish = dishMapper.selectById(dishId);
-                shoppingCart.setDishId(dish.getId());
+                shoppingCart.setImage(dish.getImage());
                 shoppingCart.setName(dish.getName());
                 shoppingCart.setAmount(dish.getPrice());
             }
