@@ -54,7 +54,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.setUserId(currentId);
 
         // 判断当前加入到购物车中的数据是否已经存在
-        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+        List<ShoppingCart> list = shoppingCartMapper.selectList(shoppingCart);
 
 
         if (list != null && list.size() > 0) {
@@ -97,7 +97,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public List<ShoppingCart> getShoppingCart() {
         Long currentId = BaseContext.getCurrentId();
-        List<ShoppingCart> list = shoppingCartMapper.selectByUserId(currentId);
+        ShoppingCart sc = ShoppingCart.builder().userId(currentId).build();
+        List<ShoppingCart> list = shoppingCartMapper.selectList(sc);
         return list;
     }
 

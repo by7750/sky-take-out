@@ -20,7 +20,7 @@ public interface ShoppingCartMapper {
      * @param shoppingCart
      * @return
      */
-    List<ShoppingCart> list(ShoppingCart shoppingCart);
+    List<ShoppingCart> selectList(ShoppingCart shoppingCart);
 
     /**
      * 根据id更新数量和价格
@@ -41,15 +41,6 @@ public interface ShoppingCartMapper {
     @Insert("insert into shopping_cart(id, name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time) " +
             "values (#{id}, #{name}, #{image}, #{userId}, #{dishId}, #{setmealId}, #{dishFlavor}, #{number}, #{amount}, #{createTime})")
     int insert(ShoppingCart shoppingCart);
-
-    /**
-     * 根据用户ID查找购物车信息
-     *
-     * @param currentId
-     * @return
-     */
-    @Select("select id, name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time from shopping_cart where user_id = #{c}")
-    List<ShoppingCart> selectByUserId(Long currentId);
 
     /**
      * 根据用户ID删除购物车
