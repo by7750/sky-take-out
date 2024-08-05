@@ -57,4 +57,13 @@ public class ShoppingCartController {
         return Result.success(shoppingCartList);
     }
 
+    @ApiOperation("清空购物车")
+    @DeleteMapping("/clean")
+    public Result clean() {
+        log.info("用户{}清空购物车信息", BaseContext.getCurrentId());
+        shoppingCartService.cleanShoppingCart();
+
+        return Result.success();
+    }
+
 }
