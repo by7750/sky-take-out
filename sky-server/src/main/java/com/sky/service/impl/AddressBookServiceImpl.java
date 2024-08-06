@@ -44,7 +44,7 @@ public class AddressBookServiceImpl implements AddressBookService {
      * @return
      */
     public AddressBook getById(Long id) {
-        AddressBook addressBook = addressBookMapper.getById(id);
+        AddressBook addressBook = addressBookMapper.selectById(id);
         return addressBook;
     }
 

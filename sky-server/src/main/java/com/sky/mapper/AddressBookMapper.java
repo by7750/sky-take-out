@@ -31,7 +31,7 @@ public interface AddressBookMapper {
      * @return
      */
     @Select("select * from address_book where id = #{id}")
-    AddressBook getById(Long id);
+    AddressBook selectById(Long id);
 
     /**
      * 根据id修改
