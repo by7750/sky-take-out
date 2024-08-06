@@ -28,7 +28,7 @@ public interface ShoppingCartMapper {
      * @param cart
      * @return
      */
-    @Update("update shopping_cart set number = #{number}, amount = #{amount} where id = #{id}")
+    @Update("update shopping_cart set number = #{number} where id = #{id}")
     int updateNumberById(ShoppingCart cart);
 
 

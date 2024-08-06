@@ -62,7 +62,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             ShoppingCart cart = list.get(0);
             Integer number = cart.getNumber();
             cart.setNumber(number + 1);
-            cart.setAmount(cart.getAmount().divide(BigDecimal.valueOf(number)).multiply(BigDecimal.valueOf(cart.getNumber())));
+            // cart.setAmount(cart.getAmount().divide(BigDecimal.valueOf(number)).multiply(BigDecimal.valueOf(cart.getNumber())));
             int i = shoppingCartMapper.updateNumberById(cart);
         } else {
             // 不存在则插入
