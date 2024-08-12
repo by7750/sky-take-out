@@ -29,4 +29,7 @@ public interface UserMapper {
      * @return
      */
     int insert(User user);
+
+    @Select("select * from user where id = #{userId}")
+    User getById(Long userId);
 }
