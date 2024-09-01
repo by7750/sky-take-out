@@ -22,12 +22,15 @@ public interface OrderMapper {
 
     /**
      * 插入订单
+     *
      * @param orders
      * @return
      */
     int insert(Orders orders);
+
     /**
      * 根据订单号查询订单
+     *
      * @param orderNumber
      */
     @Select("select * from orders where number = #{orderNumber}")
@@ -35,6 +38,7 @@ public interface OrderMapper {
 
     /**
      * 修改订单信息
+     *
      * @param orders
      */
     void update(Orders orders);
@@ -43,4 +47,12 @@ public interface OrderMapper {
 
     @Select("select * from orders where id = #{id}")
     Orders selectById(Long id);
+
+    /**
+     * 根据状态统计订单数量
+     *
+     * @param status
+     */
+    @Select("select count(*) from orders where status = #{status}")
+    Integer countStatus(Integer status);
 }
