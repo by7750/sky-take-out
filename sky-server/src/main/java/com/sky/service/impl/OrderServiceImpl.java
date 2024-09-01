@@ -10,6 +10,7 @@ import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
+import com.sky.exception.BaseException;
 import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.*;
@@ -21,6 +22,7 @@ import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yao
@@ -248,5 +251,34 @@ public class OrderServiceImpl implements OrderService {
         orders.setCancelTime(LocalDateTime.now());
         orderMapper.update(orders);
     }
+
+
+    /**
+     * 再来一单
+     *
+     * @param id
+     */
+    @Override
+    public void repetition(Long id) {
+        Long userId = BaseContext.getCurrentId();
+
+        List<OrderDetail> orderDetails = orderDetailMapper.selectByOrderId(id);
+        // 将商品详情对象转化为购物车对象
+        List<ShoppingCart> shoppingCartList = orderDetails.stream().map(e -> {
+            ShoppingCart shoppingCart = ShoppingCart.builder()
+                    .userId(userId)
+                    .createTime(LocalDateTime.now())
+                    .build();
+            BeanUtils.copyProperties(e, shoppingCart);
+            return shoppingCart;
+        }).collect(Collectors.toList());
+
+        int i = shoppingCartMapper.insertBatch(shoppingCartList);
+        if(i != shoppingCartList.size()){
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+    }
+
+
 
 }
