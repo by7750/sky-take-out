@@ -55,7 +55,7 @@ public class OrderController {
     public Result<OrderStatisticsVO> statistics() {
         log.info("查询各个状态订单数量统计");
         OrderStatisticsVO orderStatisticsVO = orderService.statistics();
-        return Result.success();
+        return Result.success(orderStatisticsVO);
     }
 
 }
