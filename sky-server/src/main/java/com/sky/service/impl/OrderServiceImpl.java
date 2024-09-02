@@ -6,10 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersConfirmDTO;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.BaseException;
@@ -299,6 +296,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 统计数据
+     *
      * @return
      */
     @Override
@@ -331,12 +329,44 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 接单
+     *
+     * @param ordersRejectionDTO
+     */
+    public void rejection(OrdersRejectionDTO ordersRejectionDTO) {
+        Long id = ordersRejectionDTO.getId();
+        Orders orders = orderMapper.selectById(id);
+        // 判断订单状态
+        if (orders == null || !orders.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        // 支付状态
+        if (orders.getPayStatus() == Orders.PAID) {
+            // TODO 退款
+            //用户已支付，需要退款
+//            String refund = weChatPayUtil.refund(
+//                    ordersDB.getNumber(),
+//                    ordersDB.getNumber(),
+//                    new BigDecimal(0.01),
+//                    new BigDecimal(0.01));
+//            log.info("申请退款：{}", refund);
+        }
+        Orders order = Orders.builder()
+                .status(Orders.CANCELLED)
+                .id(id)
+                .cancelTime(LocalDateTime.now())
+                .cancelReason(ordersRejectionDTO.getRejectionReason())
+                .build();
+        orderMapper.update(order);
+    }
+
+    /**
      * @param orders
      * @return
      */
     private List<OrderVO> getOrderVOList(Page<Orders> orders) {
         List<OrderVO> ret = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(orders)){
+        if (!CollectionUtils.isEmpty(orders)) {
             // 需要返回订单菜品信息，自定义OrderVO响应结果
             ret = orders.getResult().stream().map(e -> {
                 OrderVO orderVO = new OrderVO();
