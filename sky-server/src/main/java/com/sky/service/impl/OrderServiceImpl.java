@@ -408,6 +408,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 完成订单
+     *
+     * @param id
+     */
+    @Override
+    public void complete(Long id) {
+        Orders orders = orderMapper.selectById(id);
+        if (orders == null || !orders.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Orders order = Orders.builder().id(id).status(Orders.COMPLETED).build();
+        orderMapper.update(order);
+
+
+    }
+
+    /**
      * @param orders
      * @return
      */
