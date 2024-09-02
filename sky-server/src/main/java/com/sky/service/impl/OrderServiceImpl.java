@@ -362,6 +362,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 商家取消订单
+     *
      * @param ordersCancelDTO
      */
     @Override
@@ -384,6 +385,25 @@ public class OrderServiceImpl implements OrderService {
                 .cancelTime(LocalDateTime.now())
                 .cancelReason(ordersCancelDTO.getCancelReason())
                 .build();
+        orderMapper.update(order);
+    }
+
+    /**
+     * 派送订单
+     *
+     * @param id
+     */
+    @Override
+    public void delivery(Long id) {
+        // 根据id查询订单
+        Orders orders = orderMapper.selectById(id);
+
+        // 校验订单是否存在，并且状态为3
+        if (orders == null || !orders.getStatus().equals(Orders.CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Orders order = Orders.builder().id(id).status(Orders.DELIVERY_IN_PROGRESS).build();
         orderMapper.update(order);
     }
 

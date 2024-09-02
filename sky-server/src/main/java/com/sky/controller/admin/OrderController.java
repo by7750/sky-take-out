@@ -77,12 +77,13 @@ public class OrderController {
 
     /**
      * 拒单
+     *
      * @param ordersRejectionDTO
      * @return
      */
     @ApiOperation("拒单")
     @PutMapping("/rejection")
-    public Result rejection(@RequestBody OrdersRejectionDTO ordersRejectionDTO){
+    public Result rejection(@RequestBody OrdersRejectionDTO ordersRejectionDTO) {
         log.info("拒绝订单：{}", ordersRejectionDTO);
         orderService.rejection(ordersRejectionDTO);
         return Result.success();
@@ -90,9 +91,17 @@ public class OrderController {
 
     @ApiOperation("取消订单")
     @PutMapping("/cancel")
-    public Result cancel(@RequestBody OrdersCancelDTO ordersCancelDTO){
+    public Result cancel(@RequestBody OrdersCancelDTO ordersCancelDTO) {
         log.info("商家取消订单{}， 理由{}", ordersCancelDTO.getId(), ordersCancelDTO.getCancelReason());
         orderService.cancel(ordersCancelDTO);
+        return Result.success();
+    }
+
+    @ApiOperation("派送订单")
+    @PutMapping("/delivery/{id}")
+    public Result delivery(@PathVariable Long id) {
+        log.info("订单：{} 开始派送", id);
+        orderService.delivery(id);
         return Result.success();
     }
 }
