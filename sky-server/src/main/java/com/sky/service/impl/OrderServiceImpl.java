@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -20,6 +21,7 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -30,7 +32,9 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -59,6 +63,9 @@ public class OrderServiceImpl implements OrderService {
     private UserMapper userMapper;
     @Autowired
     private WeChatPayUtil weChatPayUtil;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     /**
      * 提交订单
@@ -105,6 +112,16 @@ public class OrderServiceImpl implements OrderService {
         int cnt = orderDetailMapper.insertBatch(orderDetailList);
         // 清空购物车数据
         shoppingCartMapper.deleteByUserId(currentUser);
+        // TODO 此处为方便测试，订单提交后直接向后台播报
+        paySuccess(orders.getNumber());
+        // 通过websocket向客户端浏览器推送消息
+//        Map<String, Object> msg = new HashMap<>();
+//        msg.put("type", 1);
+//        msg.put("orderId", orders.getId());
+//        msg.put("content", "订单号："+orders.getId());
+//        webSocketServer.sendToAllClient(JSON.toJSONString(msg));
+
+
         // 封装VO放回结果
         return OrderSubmitVO.builder()
                 .id(orders.getId())
@@ -162,6 +179,14 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+
+        // 通过websocket向客户端浏览器推送消息
+        Map<String, Object> msg = new HashMap<>();
+        msg.put("type", 1);
+        msg.put("orderId", ordersDB.getId());
+        msg.put("content", "订单号：" + outTradeNo);
+        webSocketServer.sendToAllClient(JSON.toJSONString(msg));
+
     }
 
     /**
