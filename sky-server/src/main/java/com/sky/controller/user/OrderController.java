@@ -60,6 +60,7 @@ public class OrderController {
         log.info("生成预支付交易单：{}", orderPaymentVO);
         return Result.success(orderPaymentVO);
     }
+
     /**
      * 历史订单查询
      *
@@ -79,12 +80,13 @@ public class OrderController {
 
     /**
      * 查询订单详情
+     *
      * @param id
      * @return
      */
     @ApiOperation("查询订单详情")
     @GetMapping("/orderDetail/{id}")
-    public Result<OrderVO> getOrderDetail(@PathVariable Long id){
+    public Result<OrderVO> getOrderDetail(@PathVariable Long id) {
         log.info("查询订单详情：{}", id);
         OrderVO orderVO = orderService.details(id);
         return Result.success(orderVO);
@@ -93,6 +95,7 @@ public class OrderController {
 
     /**
      * 取消订单
+     *
      * @param id
      * @return
      */
@@ -106,14 +109,29 @@ public class OrderController {
 
     /**
      * 再来一单
+     *
      * @param id
      * @return
      */
     @ApiOperation("再来一单")
     @PostMapping("/repetition/{id}")
-    public Result repetition(@PathVariable Long id){
+    public Result repetition(@PathVariable Long id) {
         log.info("再来一单：{}", id);
         orderService.repetition(id);
+        return Result.success();
+    }
+
+    /**
+     * 催单
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation("客户催单")
+    @GetMapping("/reminder/{id}")
+    public Result reminder(@PathVariable Long id) {
+        log.info("客户催单：{}", id);
+        orderService.reminder(id);
         return Result.success();
     }
 
