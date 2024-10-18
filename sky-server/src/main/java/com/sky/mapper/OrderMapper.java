@@ -1,15 +1,20 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.DataOverViewQueryDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yao
@@ -67,4 +72,14 @@ public interface OrderMapper {
      */
     @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
     List<Orders> selectByStatusAndOrderTimeLT(@Param("status") Integer status, @Param("orderTime") LocalDateTime orderTime);
+
+    /**
+     * 查询营业额
+     *
+     * @param map 查询条件
+     * @return
+     */
+
+    @MapKey("time")
+    Map<LocalDate, Map<String, Object>> selectTurnover(Map<String, Object> map);
 }

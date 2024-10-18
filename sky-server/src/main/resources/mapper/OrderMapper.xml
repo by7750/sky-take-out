@@ -50,4 +50,16 @@
             </if>
         </where>
     </select>
+
+    <resultMap id="turnoverResultMap" type="map">
+        <result property="time" column="time" javaType="java.time.LocalDate"/>
+        <result property="turnover" column="turnover" javaType="java.math.BigDecimal"/>
+    </resultMap>
+    <select id="selectTurnover" resultMap="turnoverResultMap">
+        select DATE(order_time) time, sum(amount) turnover
+        from orders
+        where order_time between #{begin} and #{end}
+         <!-- and status = #{status}-->
+        group by DATE(order_time)
+    </select>
 </mapper>
