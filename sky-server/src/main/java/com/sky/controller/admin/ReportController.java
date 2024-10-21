@@ -3,6 +3,7 @@ package com.sky.controller.admin;
 import com.sky.dto.DataOverViewQueryDTO;
 import com.sky.result.Result;
 import com.sky.service.ReportService;
+import com.sky.vo.OrderReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import io.swagger.annotations.Api;
@@ -37,7 +38,7 @@ public class ReportController {
     @ApiOperation("营业额统计")
     @GetMapping("/turnoverStatistics")
     public Result<TurnoverReportVO> turnoverStatistics(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
-                                                       @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end){
+                                                       @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
         log.info("查询营业额：{} ---- {}", begin, end);
 
         return Result.success(reportService.getTurnoverStatistics(begin, end));
@@ -45,16 +46,34 @@ public class ReportController {
 
     /**
      * 用户统计
+     *
      * @param begin
      * @param end
      * @return
      */
     @ApiOperation("用户统计")
     @GetMapping("/userStatistics")
-    public Result<UserReportVO>  userStatistics(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
-                                                @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end){
+    public Result<UserReportVO> userStatistics(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+                                               @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
         log.info("用户统计：{} ---- {}", begin, end);
         return Result.success(reportService.getUserStatistics(begin, end));
+    }
+
+    /**
+     * 订单统计
+     *
+     * @param begin 开始时间
+     * @param end   结束时间
+     * @return
+     */
+    @ApiOperation("订单统计")
+    @GetMapping("/ordersStatistics")
+    public Result<OrderReportVO> orderStatistics(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+                                                 @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        log.info("订单统计：{} ---- {}", begin, end);
+
+        return Result.success(reportService.getOrderStatistics(begin, end));
+
     }
 
 }
